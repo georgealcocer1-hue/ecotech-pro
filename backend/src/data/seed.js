@@ -1,0 +1,162 @@
+// Datos iniciales (semilla) que se cargan la primera vez que arranca el servidor.
+// La base de datos real vive en src/data/db.json y se genera a partir de esto.
+
+export const seed = {
+  perfil: {
+    empresa: "Corporativo Nexus S.A.",
+    inicial: "N",
+    saludo: "Buenos días,",
+    nivel: "🌟 Cliente Habitual · Nivel Oro",
+    puntos: 3500,
+    metaPuntos: 4000,
+    recompensa: "Recolección Gratuita",
+  },
+
+  gestores: [
+    {
+      id: "ecored",
+      nombre: "EcoRed Soluciones",
+      icon: "♻️",
+      tipo: "Reciclaje",
+      etiquetaTipo: "Reciclaje · Gestor Certificado",
+      rating: 4.9,
+      reviews: 312,
+      distanciaKm: 1.2,
+      abierto: true,
+      certificacion: "Certificado NOM-161-SEMARNAT",
+      tags: ["Residuos RAEE", "Grandes Empresas", "ISO 14001", "Baterías Li-Ion", "Exportación"],
+      servicios: [
+        { icon: "♻️", label: "Reciclaje" },
+        { icon: "🚛", label: "Recolección" },
+        { icon: "🔧", label: "Reparación" },
+        { icon: "📄", label: "Certificado" },
+      ],
+      horario: [
+        { dia: "Lun – Vie", horas: "08:00 – 18:00", disponible: true },
+        { dia: "Sábado", horas: "09:00 – 14:00", disponible: true },
+        { dia: "Domingo", horas: "Cerrado", disponible: false },
+      ],
+      mapa: { top: "10%", left: "30%", color: "green" },
+    },
+    {
+      id: "repairx",
+      nombre: "RepairX Industrial",
+      icon: "🔧",
+      tipo: "Reparación",
+      etiquetaTipo: "Reparación · Preparador",
+      rating: 4.7,
+      reviews: 184,
+      distanciaKm: 2.8,
+      abierto: true,
+      certificacion: "Certificado ISO 14001",
+      tags: ["Reparación", "Reacondicionamiento", "PyMEs", "Garantía 6 meses"],
+      servicios: [
+        { icon: "🔧", label: "Reparación" },
+        { icon: "🚛", label: "Recolección" },
+        { icon: "🔋", label: "Baterías" },
+        { icon: "📄", label: "Certificado" },
+      ],
+      horario: [
+        { dia: "Lun – Vie", horas: "09:00 – 17:00", disponible: true },
+        { dia: "Sábado", horas: "Cerrado", disponible: false },
+        { dia: "Domingo", horas: "Cerrado", disponible: false },
+      ],
+      mapa: { top: "36%", left: "5%", color: "amber" },
+    },
+    {
+      id: "colectatech",
+      nombre: "ColectaTech",
+      icon: "🗑️",
+      tipo: "Recolección",
+      etiquetaTipo: "Recolección · Logística",
+      rating: 4.8,
+      reviews: 97,
+      distanciaKm: 3.5,
+      abierto: false,
+      certificacion: "Registro GAD Guayaquil",
+      tags: ["Recolección masiva", "Servidores", "Logística", "Grandes volúmenes"],
+      servicios: [
+        { icon: "🚛", label: "Recolección" },
+        { icon: "📦", label: "Logística" },
+        { icon: "♻️", label: "Reciclaje" },
+        { icon: "📄", label: "Certificado" },
+      ],
+      horario: [
+        { dia: "Lun – Vie", horas: "07:00 – 16:00", disponible: true },
+        { dia: "Sábado", horas: "08:00 – 12:00", disponible: true },
+        { dia: "Domingo", horas: "Cerrado", disponible: false },
+      ],
+      mapa: { top: "15%", left: "62%", color: "green" },
+    },
+  ],
+
+  planes: [
+    {
+      id: "pyme",
+      nombre: "PyME",
+      target: "Para 1–50 empleados",
+      precioMensual: 2490,
+      precioAnual: 23900,
+      featured: false,
+      features: [
+        "Hasta 3 gestores activos",
+        "4 recolecciones/mes",
+        "Certificados básicos",
+      ],
+    },
+    {
+      id: "corporativo",
+      nombre: "Corporativo",
+      target: "Para 51–500 empleados",
+      precioMensual: 7990,
+      precioAnual: 76700,
+      featured: true,
+      features: [
+        "Gestores ilimitados",
+        "Recolecciones ilimitadas",
+        "Cert. NOM-161 + trazabilidad",
+        "Dashboard ESG en tiempo real",
+      ],
+    },
+  ],
+
+  // Historial de recolecciones / órdenes ya completadas.
+  ordenes: [
+    {
+      id: "ord-001",
+      titulo: "Lote 15 Laptops HP",
+      gestorId: "ecored",
+      gestorNombre: "EcoRed",
+      fecha: "2026-06-12",
+      puntos: 450,
+      estado: "Completado",
+      equipos: [],
+    },
+    {
+      id: "ord-002",
+      titulo: "Cables y Periféricos mixtos",
+      gestorId: "repairx",
+      gestorNombre: "RepairX",
+      fecha: "2026-05-28",
+      puntos: 120,
+      estado: "Completado",
+      equipos: [],
+    },
+    {
+      id: "ord-003",
+      titulo: "Servidores Antiguos (Rack)",
+      gestorId: "colectatech",
+      gestorNombre: "ColectaTech",
+      fecha: "2026-05-03",
+      puntos: 1200,
+      estado: "Completado",
+      equipos: [],
+    },
+  ],
+
+  suscripcion: {
+    planId: "corporativo",
+    ciclo: "mensual",
+    metodoPago: "tarjeta",
+  },
+};

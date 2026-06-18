@@ -1,0 +1,20 @@
+{
+  "name": "ecotech-pro",
+  "version": "1.0.0",
+  "description": "EcoTech Pro — app de gestión de residuos electrónicos (monorepo frontend + backend)",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install --prefix backend && npm install --prefix frontend",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev": "concurrently -n API,WEB -c green,cyan \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
+    "start": "node backend/server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}
