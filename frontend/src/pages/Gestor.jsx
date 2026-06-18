@@ -9,6 +9,7 @@ export default function Gestor() {
   const navigate = useNavigate();
   const [gestor, setGestor] = useState(null);
   const [error, setError] = useState(null);
+  const [servicioSeleccionado, setServicioSeleccionado] = useState(null);
 
   useEffect(() => {
     api.getGestor(id).then(setGestor).catch((e) => setError(e.message));
@@ -51,7 +52,11 @@ export default function Gestor() {
         <div className="s2-section-title">Servicios Disponibles</div>
         <div className="s2-services">
           {gestor.servicios.map((s) => (
-            <div key={s.label} className="service-chip">
+            <div
+              key={s.label}
+              className={`service-chip${servicioSeleccionado === s.label ? " active" : ""}`}
+              onClick={() => setServicioSeleccionado(s.label)}
+            >
               <div className="s-icon">{s.icon}</div>
               <div className="s-label">{s.label}</div>
             </div>
