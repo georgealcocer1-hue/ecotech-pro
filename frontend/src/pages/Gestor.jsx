@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { api } from "../services/api.js";
 
 const tagColors = ["green", "blue", "green", "orange", "blue"];
@@ -7,9 +7,17 @@ const tagColors = ["green", "blue", "green", "orange", "blue"];
 export default function Gestor() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [gestor, setGestor] = useState(null);
   const [error, setError] = useState(null);
-  const [servicioSeleccionado, setServicioSeleccionado] = useState(null);
+  const [servicioSeleccionado, setServicioSeleccionado] = useState(
+    searchParams.get("servicio") || null
+  );
+
+  const seleccionar = (label) => {
+    setServicioSeleccionado(label);
+    setSearchParams({ servicio: label }, { replace: true });
+  };
 
   useEffect(() => {
     api.getGestor(id).then(setGestor).catch((e) => setError(e.message));
@@ -55,7 +63,7 @@ export default function Gestor() {
             <div
               key={s.label}
               className={`service-chip${servicioSeleccionado === s.label ? " active" : ""}`}
-              onClick={() => setServicioSeleccionado(s.label)}
+              onClick={() => seleccionar(s.label)}
             >
               <div className="s-icon">{s.icon}</div>
               <div className="s-label">{s.label}</div>
@@ -81,7 +89,9 @@ export default function Gestor() {
         ))}
       </div>
 
-      <button className="s2-cta" onClick={() => navigate(`/registrar/${gestor.id}`)}>
+      <button
+        className="s2-cta"
+        onClick={() => navigate(`/registrar/${gestor.id}${servicioSeleccionado ? `?servicio=${encodeURIComponent(servicioSeleccionado)}` : ""}`)}>
         <div>
           <div className="s2-cta-title">Solicitar Recolección</div>
           <div className="s2-cta-sub">Agenda en menos de 2 min</div>

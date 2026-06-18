@@ -28,6 +28,9 @@ export const api = {
   crearOrden: (data) =>
     request("/ordenes", { method: "POST", body: JSON.stringify(data) }),
 
+  canjearRecompensa: () =>
+    request("/perfil/canjear", { method: "POST", body: JSON.stringify({}) }),
+
   getSuscripcion: () => request("/suscripcion"),
   actualizarSuscripcion: (data) =>
     request("/suscripcion", { method: "POST", body: JSON.stringify(data) }),

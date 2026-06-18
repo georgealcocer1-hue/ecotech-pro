@@ -25,10 +25,8 @@ router.post("/", (req, res) => {
   const db = readDb();
   const gestor = db.gestores.find((g) => g.id === gestorId);
 
-  // Puntos estimados: base + bonus por peso registrado.
-  const peso = Number(equipo.peso) || 0;
-  const cantidad = Number(equipo.cantidad) || 1;
-  const puntos = Math.round(50 + peso * 10 + cantidad * 5);
+  // 1 punto por gramo (peso en kg → × 1000), mínimo 10 puntos por solicitud.
+  const puntos = Math.max(10, Math.round(Number(equipo.peso || 0) * 1000));
 
   const nuevaOrden = {
     id: `ord-${randomUUID().slice(0, 8)}`,

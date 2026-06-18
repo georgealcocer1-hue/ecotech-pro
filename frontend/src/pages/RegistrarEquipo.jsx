@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { api } from "../services/api.js";
 
 const ESTADOS = [
@@ -11,6 +11,8 @@ const ESTADOS = [
 export default function RegistrarEquipo() {
   const { gestorId } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const servicioParam = searchParams.get("servicio");
 
   const hoy = new Date().toISOString().slice(0, 10);
 
@@ -33,7 +35,8 @@ export default function RegistrarEquipo() {
     if (!form.marcaModelo.trim()) return;
     setEnviando(true);
     try {
-      const orden = await api.crearOrden({ gestorId, equipo: form });
+      const equipo = servicioParam ? { ...form, servicio: servicioParam } : form;
+      const orden = await api.crearOrden({ gestorId, equipo });
       setToast(`✓ Registrado · +${orden.puntos} pts`);
       setTimeout(() => navigate("/recompensas"), 1400);
     } catch (err) {
@@ -61,6 +64,12 @@ export default function RegistrarEquipo() {
             residuos en Guayaquil (Ordenanza GAD y estándares ISO 14001).
           </div>
         </div>
+
+        {servicioParam && (
+          <div className="s5-servicio-badge">
+            Servicio seleccionado: <strong>{servicioParam}</strong>
+          </div>
+        )}
 
         <form onSubmit={enviar}>
           <div className="form-group">

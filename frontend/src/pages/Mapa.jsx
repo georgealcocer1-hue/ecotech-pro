@@ -11,9 +11,13 @@ export default function Mapa() {
   const [filtro, setFiltro] = useState("Todos");
   const [busqueda, setBusqueda] = useState("");
   const [cargando, setCargando] = useState(true);
+  const [pendientes, setPendientes] = useState([]);
 
   useEffect(() => {
     api.getPerfil().then(setPerfil).catch(() => {});
+    api.getOrdenes()
+      .then((ords) => setPendientes(ords.filter((o) => o.estado !== "Completado")))
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -84,6 +88,28 @@ export default function Mapa() {
           </div>
         ))}
       </div>
+
+      {filtro !== "Todos" && !cargando && (
+        <div className="s1-filtro-info">
+          {visibles.length} gestor{visibles.length !== 1 ? "es" : ""} · {filtro}
+        </div>
+      )}
+
+      {pendientes.length > 0 && (
+        <div className="s1-pendientes">
+          <div className="s1-pendientes-title">Solicitudes pendientes</div>
+          {pendientes.map((o) => (
+            <div key={o.id} className="pendiente-item" onClick={() => navigate("/recompensas")}>
+              <div className="pendiente-dot" />
+              <div className="pendiente-info">
+                <div className="pendiente-titulo">{o.titulo}</div>
+                <div className="pendiente-sub">{o.gestorNombre} · {o.estado}</div>
+              </div>
+              <span className="pendiente-arrow">›</span>
+            </div>
+          ))}
+        </div>
+      )}
 
       <div className="s1-card-row">
         {cargando && <div className="loading">Cargando gestores…</div>}

@@ -7,9 +7,9 @@ export const seed = {
     inicial: "N",
     saludo: "Buenos días,",
     nivel: "🌟 Cliente Habitual · Nivel Oro",
-    puntos: 3500,
-    metaPuntos: 4000,
-    recompensa: "Recolección Gratuita",
+    puntos: 800,
+    metaPuntos: 1000,
+    recompensasCanjeadas: 0,
   },
 
   gestores: [

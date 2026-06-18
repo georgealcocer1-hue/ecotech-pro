@@ -2,6 +2,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../services/api.js";
 
+const RECOMPENSAS = [
+  { id: "recoleccion", icon: "🚛", titulo: "Recolección gratis", desc: "Una recolección de hasta 50 kg sin costo adicional" },
+  { id: "descuento", icon: "💰", titulo: "10% de descuento", desc: "En tu próxima solicitud de recolección" },
+  { id: "certificado", icon: "📜", titulo: "Certificado ambiental", desc: "Certificado oficial del impacto ambiental de tu empresa" },
+  { id: "prioridad", icon: "⚡", titulo: "Agenda prioritaria", desc: "Atención preferencial durante la siguiente semana" },
+];
+
 const fmtFecha = (iso) => {
   const d = new Date(iso + "T00:00:00");
   return d.toLocaleDateString("es-EC", { day: "2-digit", month: "long", year: "numeric" });
@@ -11,13 +18,39 @@ export default function Recompensas() {
   const navigate = useNavigate();
   const [perfil, setPerfil] = useState(null);
   const [ordenes, setOrdenes] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [recompensaElegida, setRecompensaElegida] = useState(null);
+  const [canjeando, setCanjeando] = useState(false);
+
+  const cargarPerfil = () => api.getPerfil().then(setPerfil);
 
   useEffect(() => {
-    api.getPerfil().then(setPerfil);
+    cargarPerfil();
     api.getOrdenes().then(setOrdenes);
   }, []);
 
+  useEffect(() => {
+    if (perfil && perfil.recompensasDisponibles > perfil.recompensasCanjeadas) {
+      setModalVisible(true);
+    }
+  }, [perfil]);
+
+  async function canjear() {
+    if (!recompensaElegida) return;
+    setCanjeando(true);
+    try {
+      await api.canjearRecompensa();
+      await cargarPerfil();
+      setModalVisible(false);
+      setRecompensaElegida(null);
+    } finally {
+      setCanjeando(false);
+    }
+  }
+
   if (!perfil) return <div className="loading">Cargando perfil…</div>;
+
+  const recompensasPendientes = perfil.recompensasDisponibles - perfil.recompensasCanjeadas;
 
   return (
     <>
@@ -34,9 +67,12 @@ export default function Recompensas() {
 
       <div className="s4-rewards-card">
         <div className="s4-points-header">
-          <div className="s4-points-title">Puntos Ambientales</div>
+          <div>
+            <div className="s4-points-title">Puntos del ciclo actual</div>
+            <div className="s4-points-total">{perfil.puntos.toLocaleString("es-EC")} pts acumulados</div>
+          </div>
           <div className="s4-points-value">
-            {perfil.puntos.toLocaleString("es-EC")} <span>pts</span>
+            {(perfil.puntosEnBarra ?? perfil.puntos).toLocaleString("es-EC")} <span>/ 1000</span>
           </div>
         </div>
         <div className="s4-progress-bg">
@@ -45,15 +81,18 @@ export default function Recompensas() {
         <div className="s4-progress-text">
           {perfil.restante > 0 ? (
             <>
-              Te faltan <strong>{perfil.restante} pts</strong> para una{" "}
-              <strong>{perfil.recompensa}</strong>.
+              Te faltan <strong>{perfil.restante} pts</strong> para tu próxima recompensa.
+              <span className="s4-pts-hint"> (1 pt = 1 gramo)</span>
             </>
           ) : (
-            <>
-              ¡Has desbloqueado una <strong>{perfil.recompensa}</strong>! 🎉
-            </>
+            <>¡Ciclo completado! 🎉 Selecciona tu recompensa.</>
           )}
         </div>
+        {recompensasPendientes > 0 && (
+          <button className="s4-ver-recompensa-btn" onClick={() => setModalVisible(true)}>
+            🎁 {recompensasPendientes} recompensa{recompensasPendientes > 1 ? "s" : ""} disponible{recompensasPendientes > 1 ? "s" : ""}
+          </button>
+        )}
       </div>
 
       <div className="s4-history">
@@ -98,6 +137,42 @@ export default function Recompensas() {
           })
         )}
       </div>
+
+      {modalVisible && (
+        <div
+          className="recompensa-overlay"
+          onClick={(e) => e.target === e.currentTarget && setModalVisible(false)}
+        >
+          <div className="recompensa-sheet">
+            <div className="recompensa-sheet-title">🎉 ¡Recompensa disponible!</div>
+            <div className="recompensa-sheet-sub">
+              {recompensasPendientes > 1
+                ? `Tienes ${recompensasPendientes} recompensas por canjear · Elige una`
+                : "Elige tu recompensa"}
+            </div>
+            <div className="recompensa-opciones">
+              {RECOMPENSAS.map((r) => (
+                <div
+                  key={r.id}
+                  className={`recompensa-opcion${recompensaElegida === r.id ? " selected" : ""}`}
+                  onClick={() => setRecompensaElegida(r.id)}
+                >
+                  <div className="recompensa-opcion-icon">{r.icon}</div>
+                  <div className="recompensa-opcion-titulo">{r.titulo}</div>
+                  <div className="recompensa-opcion-desc">{r.desc}</div>
+                </div>
+              ))}
+            </div>
+            <button
+              className="recompensa-canjear-btn"
+              onClick={canjear}
+              disabled={!recompensaElegida || canjeando}
+            >
+              {canjeando ? "Canjeando…" : "Canjear recompensa →"}
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 }
