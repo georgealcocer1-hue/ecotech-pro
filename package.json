@@ -1,7 +1,7 @@
 {
   "name": "ecotech-pro",
   "version": "1.0.0",
-  "description": "EcoTech Pro — app de gestión de residuos electrónicos (monorepo frontend + backend)",
+  "description": "EcoRed — app de gestión de residuos electrónicos (monorepo frontend + backend)",
   "private": true,
   "scripts": {
     "install:all": "npm install --prefix backend && npm install --prefix frontend",

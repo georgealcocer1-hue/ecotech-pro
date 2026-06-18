@@ -1,4 +1,4 @@
-# Blueprint de Render: despliega EcoTech Pro como un solo servicio Node.
+# Blueprint de Render: despliega EcoRed como un solo servicio Node.
 # (Express sirve la API en /api y la app React compilada en frontend/dist.)
 services:
   - type: web

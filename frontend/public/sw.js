@@ -1,5 +1,5 @@
 // Service worker mínimo: habilita la instalación como PWA y un caché básico.
-const CACHE = "ecotech-v1";
+const CACHE = "ecored-v1";
 const ASSETS = ["/", "/index.html", "/icon.svg", "/manifest.webmanifest"];
 
 self.addEventListener("install", (e) => {

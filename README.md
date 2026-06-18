@@ -1,4 +1,4 @@
-# EcoTech Pro ♻️
+# EcoRed ♻️
 
 App de **gestión de residuos electrónicos (RAEE)** para empresas en Ecuador (Guayaquil).
 Conecta empresas con gestores certificados para reciclar, reparar y recolectar equipos

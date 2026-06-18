@@ -18,7 +18,7 @@ app.use(cors());
 app.use(express.json());
 
 // Salud del servicio
-app.get("/api/health", (req, res) => res.json({ ok: true, service: "ecotech-api" }));
+app.get("/api/health", (req, res) => res.json({ ok: true, service: "ecored-api" }));
 
 // Rutas de la API
 app.use("/api/gestores", gestoresRouter);
@@ -41,5 +41,5 @@ if (existsSync(distPath)) {
 }
 
 app.listen(PORT, () => {
-  console.log(`🌿 EcoTech corriendo en http://localhost:${PORT}`);
+  console.log(`🌿 EcoRed corriendo en http://localhost:${PORT}`);
 });

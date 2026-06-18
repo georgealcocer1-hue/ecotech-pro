@@ -1,7 +1,7 @@
 {
   "name": "ecotech-backend",
   "version": "1.0.0",
-  "description": "API REST para EcoTech Pro - gestión de residuos electrónicos",
+  "description": "API REST para EcoRed - gestión de residuos electrónicos",
   "type": "module",
   "main": "server.js",
   "scripts": {
