@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { api } from "../services/api.js";
 
 const fmtFecha = (iso) => {
@@ -7,6 +8,7 @@ const fmtFecha = (iso) => {
 };
 
 export default function Recompensas() {
+  const navigate = useNavigate();
   const [perfil, setPerfil] = useState(null);
   const [ordenes, setOrdenes] = useState([]);
 
@@ -56,29 +58,45 @@ export default function Recompensas() {
 
       <div className="s4-history">
         <div className="s2-section-title">Historial de Recolección</div>
-        {ordenes.map((o) => {
-          const pend = o.estado !== "Completado";
-          return (
-            <div key={o.id} className={`hist-item${pend ? " pendiente" : ""}`}>
-              <div className="hist-main">
-                <div className="hist-left">
-                  <div className="hist-title">{o.titulo}</div>
-                  <div className="hist-date">
-                    {fmtFecha(o.fecha)} • Gestor: {o.gestorNombre}
+        {ordenes.length === 0 ? (
+          <div className="hist-empty">
+            <div className="hist-empty-icon">📦</div>
+            <div className="hist-empty-title">Aún no tienes solicitudes</div>
+            <div className="hist-empty-sub">
+              Registra tu primer equipo para empezar a acumular puntos ambientales.
+            </div>
+            <button className="hist-empty-btn" onClick={() => navigate("/")}>
+              Buscar gestor →
+            </button>
+          </div>
+        ) : (
+          ordenes.map((o) => {
+            const pend = o.estado !== "Completado";
+            return (
+              <div key={o.id} className={`hist-item${pend ? " pendiente" : ""}`}>
+                <div className="hist-main">
+                  <div className="hist-left">
+                    <div className="hist-title">{o.titulo}</div>
+                    <div className="hist-date">
+                      {fmtFecha(o.fecha)} • Gestor: {o.gestorNombre}
+                    </div>
+                    {o.fechaRecoleccion && (
+                      <div className="hist-pickup">📅 Recolección: {fmtFecha(o.fechaRecoleccion)}</div>
+                    )}
+                  </div>
+                  <div className="hist-right">
+                    <div className="hist-pts">+ {o.puntos} pts</div>
+                    <div className={`hist-status${pend ? " pendiente" : ""}`}>{o.estado}</div>
                   </div>
                 </div>
-                <div className="hist-right">
-                  <div className="hist-pts">+ {o.puntos} pts</div>
-                  <div className={`hist-status${pend ? " pendiente" : ""}`}>{o.estado}</div>
+                <div className="hist-contact">
+                  <div className="hist-contact-btn chat">💬 Chat</div>
+                  <div className="hist-contact-btn llamar">📞 Llamar</div>
                 </div>
               </div>
-              <div className="hist-contact">
-                <div className="hist-contact-btn chat">💬 Chat</div>
-                <div className="hist-contact-btn llamar">📞 Llamar</div>
-              </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
     </>
   );

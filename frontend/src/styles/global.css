@@ -258,6 +258,12 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .hist-contact-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px; padding: 8px; border-radius: 10px; font-size: 11px; font-weight: 700; cursor: pointer; }
 .hist-contact-btn.chat { background: var(--green-pale); color: var(--green-accent); }
 .hist-contact-btn.llamar { background: #EFF6FF; color: #2563EB; }
+.hist-pickup { font-size: 10px; color: var(--slate); margin-top: 3px; }
+.hist-empty { text-align: center; padding: 28px 16px; }
+.hist-empty-icon { font-size: 38px; margin-bottom: 10px; }
+.hist-empty-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 14px; color: var(--green-deep); margin-bottom: 6px; }
+.hist-empty-sub { font-size: 11px; color: var(--slate-light); margin-bottom: 16px; line-height: 1.5; }
+.hist-empty-btn { background: var(--green-mid); color: white; border: none; border-radius: 12px; padding: 10px 22px; font-size: 13px; font-weight: 700; cursor: pointer; }
 
 /* ══ SCREEN 5 — FORMULARIO ENVÍO ══ */
 .s5-header { background: var(--white); padding: 52px 20px 16px; border-bottom: 1px solid #E8F0EB; z-index: 10; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }

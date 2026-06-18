@@ -36,6 +36,7 @@ router.post("/", (req, res) => {
     gestorId: gestorId || null,
     gestorNombre: gestor ? gestor.nombre : "Sin asignar",
     fecha: new Date().toISOString().slice(0, 10),
+    fechaRecoleccion: equipo.fechaRecoleccion || null,
     puntos,
     estado: "Pendiente",
     equipos: [equipo],

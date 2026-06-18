@@ -12,12 +12,15 @@ export default function RegistrarEquipo() {
   const { gestorId } = useParams();
   const navigate = useNavigate();
 
+  const hoy = new Date().toISOString().slice(0, 10);
+
   const [form, setForm] = useState({
     marcaModelo: "",
     estado: "parcial",
     cantidad: "",
     peso: "",
     dimension: "Mediano (Laptops, Monitores)",
+    fechaRecoleccion: "",
     comentarios: "",
   });
   const [enviando, setEnviando] = useState(false);
@@ -116,6 +119,17 @@ export default function RegistrarEquipo() {
               <option>Mediano (Laptops, Monitores)</option>
               <option>Grande (Servidores, Electrodomésticos)</option>
             </select>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Fecha preferida de recolección</label>
+            <input
+              type="date"
+              className="form-input"
+              min={hoy}
+              value={form.fechaRecoleccion}
+              onChange={set("fechaRecoleccion")}
+            />
           </div>
 
           <div className="form-group">
