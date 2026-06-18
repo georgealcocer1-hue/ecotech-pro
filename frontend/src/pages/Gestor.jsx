@@ -72,12 +72,6 @@ export default function Gestor() {
         </div>
       </div>
 
-      <div className="s2-contact-row">
-        <div className="contact-btn amber-btn" style={{ flex: "none", width: "100%" }}>
-          <div className="c-icon">📅</div>Agendar visita
-        </div>
-      </div>
-
       <div className="s2-schedule">
         <div className="schedule-title">Horario de atención</div>
         {gestor.horario.map((h) => (

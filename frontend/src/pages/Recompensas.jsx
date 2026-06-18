@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../services/api.js";
 
@@ -14,13 +14,27 @@ const fmtFecha = (iso) => {
   return d.toLocaleDateString("es-EC", { day: "2-digit", month: "long", year: "numeric" });
 };
 
+const horaActual = () =>
+  new Date().toLocaleTimeString("es-EC", { hour: "2-digit", minute: "2-digit" });
+
 export default function Recompensas() {
   const navigate = useNavigate();
   const [perfil, setPerfil] = useState(null);
   const [ordenes, setOrdenes] = useState([]);
+
+  // Modal recompensas
   const [modalVisible, setModalVisible] = useState(false);
   const [recompensaElegida, setRecompensaElegida] = useState(null);
   const [canjeando, setCanjeando] = useState(false);
+
+  // Chat
+  const [chatOrden, setChatOrden] = useState(null);
+  const [chatMensajes, setChatMensajes] = useState({});
+  const [chatInput, setChatInput] = useState("");
+  const chatBottomRef = useRef(null);
+
+  // Llamar
+  const [llamarGestor, setLlamarGestor] = useState(null);
 
   const cargarPerfil = () => api.getPerfil().then(setPerfil);
 
@@ -34,6 +48,53 @@ export default function Recompensas() {
       setModalVisible(true);
     }
   }, [perfil]);
+
+  useEffect(() => {
+    chatBottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chatMensajes, chatOrden]);
+
+  const abrirChat = (orden) => {
+    setChatOrden(orden);
+    if (!chatMensajes[orden.gestorId]) {
+      setChatMensajes((prev) => ({
+        ...prev,
+        [orden.gestorId]: [
+          {
+            de: "empresa",
+            texto: `Hola, somos el equipo de ${orden.gestorNombre}. ¿En qué podemos ayudarte con tu solicitud "${orden.titulo}"?`,
+            hora: horaActual(),
+          },
+        ],
+      }));
+    }
+  };
+
+  const enviarMensaje = () => {
+    const texto = chatInput.trim();
+    if (!texto || !chatOrden) return;
+    setChatMensajes((prev) => ({
+      ...prev,
+      [chatOrden.gestorId]: [
+        ...(prev[chatOrden.gestorId] || []),
+        { de: "usuario", texto, hora: horaActual() },
+      ],
+    }));
+    setChatInput("");
+  };
+
+  const abrirLlamar = async (orden) => {
+    try {
+      const gestor = await api.getGestor(orden.gestorId);
+      setLlamarGestor({ ...gestor, ordenTitulo: orden.titulo });
+    } catch {
+      setLlamarGestor({
+        nombre: orden.gestorNombre,
+        icon: "📞",
+        telefonos: [],
+        ordenTitulo: orden.titulo,
+      });
+    }
+  };
 
   async function canjear() {
     if (!recompensaElegida) return;
@@ -51,6 +112,7 @@ export default function Recompensas() {
   if (!perfil) return <div className="loading">Cargando perfil…</div>;
 
   const recompensasPendientes = perfil.recompensasDisponibles - perfil.recompensasCanjeadas;
+  const mensajesActuales = chatOrden ? (chatMensajes[chatOrden.gestorId] || []) : [];
 
   return (
     <>
@@ -69,10 +131,13 @@ export default function Recompensas() {
         <div className="s4-points-header">
           <div>
             <div className="s4-points-title">Puntos del ciclo actual</div>
-            <div className="s4-points-total">{perfil.puntos.toLocaleString("es-EC")} pts acumulados</div>
+            <div className="s4-points-total">
+              {perfil.puntos.toLocaleString("es-EC")} pts acumulados
+            </div>
           </div>
           <div className="s4-points-value">
-            {(perfil.puntosEnBarra ?? perfil.puntos).toLocaleString("es-EC")} <span>/ 1000</span>
+            {(perfil.puntosEnBarra ?? perfil.puntos).toLocaleString("es-EC")}{" "}
+            <span>/ {perfil.metaPuntos.toLocaleString("es-EC")}</span>
           </div>
         </div>
         <div className="s4-progress-bg">
@@ -81,18 +146,19 @@ export default function Recompensas() {
         <div className="s4-progress-text">
           {perfil.restante > 0 ? (
             <>
-              Te faltan <strong>{perfil.restante} pts</strong> para tu próxima recompensa.
+              Te faltan <strong>{perfil.restante.toLocaleString("es-EC")} pts</strong> para tu próxima
+              recompensa.
               <span className="s4-pts-hint"> (1 pt = 1 gramo)</span>
             </>
           ) : (
             <>¡Ciclo completado! 🎉 Selecciona tu recompensa.</>
           )}
         </div>
-        {recompensasPendientes > 0 && (
-          <button className="s4-ver-recompensa-btn" onClick={() => setModalVisible(true)}>
-            🎁 {recompensasPendientes} recompensa{recompensasPendientes > 1 ? "s" : ""} disponible{recompensasPendientes > 1 ? "s" : ""}
-          </button>
-        )}
+        <button className="s4-ver-recompensa-btn" onClick={() => setModalVisible(true)}>
+          {recompensasPendientes > 0
+            ? `🎁 ${recompensasPendientes} recompensa${recompensasPendientes > 1 ? "s" : ""} disponible${recompensasPendientes > 1 ? "s" : ""}`
+            : "🎁 Ver recompensas disponibles"}
+        </button>
       </div>
 
       <div className="s4-history">
@@ -120,7 +186,9 @@ export default function Recompensas() {
                       {fmtFecha(o.fecha)} • Gestor: {o.gestorNombre}
                     </div>
                     {o.fechaRecoleccion && (
-                      <div className="hist-pickup">📅 Recolección: {fmtFecha(o.fechaRecoleccion)}</div>
+                      <div className="hist-pickup">
+                        📅 Recolección: {fmtFecha(o.fechaRecoleccion)}
+                      </div>
                     )}
                   </div>
                   <div className="hist-right">
@@ -129,8 +197,12 @@ export default function Recompensas() {
                   </div>
                 </div>
                 <div className="hist-contact">
-                  <div className="hist-contact-btn chat">💬 Chat</div>
-                  <div className="hist-contact-btn llamar">📞 Llamar</div>
+                  <div className="hist-contact-btn chat" onClick={() => abrirChat(o)}>
+                    💬 Chat
+                  </div>
+                  <div className="hist-contact-btn llamar" onClick={() => abrirLlamar(o)}>
+                    📞 Llamar
+                  </div>
                 </div>
               </div>
             );
@@ -138,24 +210,29 @@ export default function Recompensas() {
         )}
       </div>
 
+      {/* ── Modal recompensas ── */}
       {modalVisible && (
         <div
           className="recompensa-overlay"
           onClick={(e) => e.target === e.currentTarget && setModalVisible(false)}
         >
           <div className="recompensa-sheet">
-            <div className="recompensa-sheet-title">🎉 ¡Recompensa disponible!</div>
+            <div className="recompensa-sheet-title">
+              {recompensasPendientes > 0 ? "🎉 ¡Recompensa disponible!" : "🎁 Recompensas"}
+            </div>
             <div className="recompensa-sheet-sub">
               {recompensasPendientes > 1
                 ? `Tienes ${recompensasPendientes} recompensas por canjear · Elige una`
-                : "Elige tu recompensa"}
+                : recompensasPendientes === 1
+                ? "Elige tu recompensa"
+                : `Acumula ${perfil.restante.toLocaleString("es-EC")} pts más para desbloquear`}
             </div>
             <div className="recompensa-opciones">
               {RECOMPENSAS.map((r) => (
                 <div
                   key={r.id}
                   className={`recompensa-opcion${recompensaElegida === r.id ? " selected" : ""}`}
-                  onClick={() => setRecompensaElegida(r.id)}
+                  onClick={() => recompensasPendientes > 0 && setRecompensaElegida(r.id)}
                 >
                   <div className="recompensa-opcion-icon">{r.icon}</div>
                   <div className="recompensa-opcion-titulo">{r.titulo}</div>
@@ -166,10 +243,82 @@ export default function Recompensas() {
             <button
               className="recompensa-canjear-btn"
               onClick={canjear}
-              disabled={!recompensaElegida || canjeando}
+              disabled={!recompensaElegida || canjeando || recompensasPendientes === 0}
             >
-              {canjeando ? "Canjeando…" : "Canjear recompensa →"}
+              {recompensasPendientes === 0
+                ? `Faltan ${perfil.restante.toLocaleString("es-EC")} pts`
+                : canjeando
+                ? "Canjeando…"
+                : "Canjear recompensa →"}
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── Chat overlay ── */}
+      {chatOrden && (
+        <div className="chat-overlay">
+          <div className="chat-sheet">
+            <div className="chat-header">
+              <button className="chat-header-back" onClick={() => setChatOrden(null)}>
+                ←
+              </button>
+              <div className="chat-header-info">
+                <div className="chat-header-name">{chatOrden.gestorNombre}</div>
+                <div className="chat-header-sub">🟢 En línea · {chatOrden.titulo}</div>
+              </div>
+            </div>
+            <div className="chat-messages">
+              {mensajesActuales.map((m, i) => (
+                <div key={i} className={`chat-msg ${m.de}`}>
+                  <div className="chat-bubble">{m.texto}</div>
+                  <div className="chat-hora">{m.hora}</div>
+                </div>
+              ))}
+              <div ref={chatBottomRef} />
+            </div>
+            <div className="chat-input-row">
+              <input
+                className="chat-input"
+                placeholder="Escribe un mensaje…"
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && enviarMensaje()}
+              />
+              <button className="chat-send-btn" onClick={enviarMensaje}>
+                ↑
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Panel llamadas ── */}
+      {llamarGestor && (
+        <div
+          className="llamar-overlay"
+          onClick={(e) => e.target === e.currentTarget && setLlamarGestor(null)}
+        >
+          <div className="llamar-sheet">
+            <div className="llamar-empresa">
+              <div className="llamar-icon">{llamarGestor.icon}</div>
+              <div>
+                <div className="llamar-nombre">{llamarGestor.nombre}</div>
+                <div className="llamar-sub">{llamarGestor.ordenTitulo}</div>
+              </div>
+            </div>
+            <div className="llamar-lista">
+              {(llamarGestor.telefonos || []).map((t) => (
+                <a key={t.numero} href={`tel:${t.numero.replace(/\s|-/g, "")}`} className="llamar-item">
+                  <div className="llamar-item-icon">{t.icon}</div>
+                  <div className="llamar-item-info">
+                    <div className="llamar-item-tipo">{t.tipo}</div>
+                    <div className="llamar-item-numero">{t.numero}</div>
+                  </div>
+                  <button className="llamar-item-call">Llamar</button>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       )}

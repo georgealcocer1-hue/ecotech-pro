@@ -7,8 +7,8 @@ export const seed = {
     inicial: "N",
     saludo: "Buenos días,",
     nivel: "🌟 Cliente Habitual · Nivel Oro",
-    puntos: 800,
-    metaPuntos: 1000,
+    puntos: 8000,
+    metaPuntos: 10000,
     recompensasCanjeadas: 0,
   },
 
@@ -35,6 +35,11 @@ export const seed = {
         { dia: "Sábado", horas: "09:00 – 14:00", disponible: true },
         { dia: "Domingo", horas: "Cerrado", disponible: false },
       ],
+      telefonos: [
+        { tipo: "Línea principal", icon: "📞", numero: "+593 4 601-7234" },
+        { tipo: "WhatsApp", icon: "💬", numero: "+593 99 123-4567" },
+        { tipo: "Urgencias", icon: "🚨", numero: "+593 4 601-7200" },
+      ],
       mapa: { top: "10%", left: "30%", color: "green" },
     },
     {
@@ -59,6 +64,11 @@ export const seed = {
         { dia: "Sábado", horas: "Cerrado", disponible: false },
         { dia: "Domingo", horas: "Cerrado", disponible: false },
       ],
+      telefonos: [
+        { tipo: "Línea principal", icon: "📞", numero: "+593 4 520-8890" },
+        { tipo: "WhatsApp", icon: "💬", numero: "+593 98 765-1234" },
+        { tipo: "Soporte técnico", icon: "🔧", numero: "+593 4 520-8891" },
+      ],
       mapa: { top: "36%", left: "5%", color: "amber" },
     },
     {
@@ -82,6 +92,11 @@ export const seed = {
         { dia: "Lun – Vie", horas: "07:00 – 16:00", disponible: true },
         { dia: "Sábado", horas: "08:00 – 12:00", disponible: true },
         { dia: "Domingo", horas: "Cerrado", disponible: false },
+      ],
+      telefonos: [
+        { tipo: "Línea principal", icon: "📞", numero: "+593 4 233-5670" },
+        { tipo: "WhatsApp", icon: "💬", numero: "+593 99 345-6789" },
+        { tipo: "Logística", icon: "🚛", numero: "+593 4 233-5671" },
       ],
       mapa: { top: "15%", left: "62%", color: "green" },
     },
