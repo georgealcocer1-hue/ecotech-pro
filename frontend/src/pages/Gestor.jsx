@@ -65,14 +65,8 @@ export default function Gestor() {
       </div>
 
       <div className="s2-contact-row">
-        <div className="contact-btn green-btn">
-          <div className="c-icon">💬</div>Chat
-        </div>
-        <div className="contact-btn outline-btn">
-          <div className="c-icon">📞</div>Llamar
-        </div>
-        <div className="contact-btn amber-btn">
-          <div className="c-icon">📅</div>Agendar
+        <div className="contact-btn amber-btn" style={{ flex: "none", width: "100%" }}>
+          <div className="c-icon">📅</div>Agendar visita
         </div>
       </div>
 

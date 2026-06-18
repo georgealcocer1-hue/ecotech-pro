@@ -245,14 +245,19 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .s4-progress-text { font-size: 10px; color: var(--slate-light); }
 .s4-progress-text strong { color: var(--green-accent); }
 .s4-history { padding: 0 16px 16px; }
-.hist-item { background: white; border-radius: 14px; padding: 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); border-left: 4px solid var(--green-light); }
+.hist-item { background: white; border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); border-left: 4px solid var(--green-light); }
 .hist-item.pendiente { border-left-color: var(--amber); }
+.hist-main { display: flex; justify-content: space-between; align-items: center; }
 .hist-title { font-weight: 700; font-size: 12px; color: var(--green-deep); margin-bottom: 2px; }
 .hist-date { font-size: 10px; color: var(--slate-light); }
 .hist-right { text-align: right; }
 .hist-pts { font-weight: 700; color: var(--amber); font-size: 13px; }
 .hist-status { font-size: 9px; color: var(--green-accent); background: var(--green-pale); padding: 2px 6px; border-radius: 8px; margin-top: 4px; display: inline-block; }
 .hist-status.pendiente { color: #92400E; background: #FEF3C7; }
+.hist-contact { display: flex; gap: 8px; }
+.hist-contact-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px; padding: 8px; border-radius: 10px; font-size: 11px; font-weight: 700; cursor: pointer; }
+.hist-contact-btn.chat { background: var(--green-pale); color: var(--green-accent); }
+.hist-contact-btn.llamar { background: #EFF6FF; color: #2563EB; }
 
 /* ══ SCREEN 5 — FORMULARIO ENVÍO ══ */
 .s5-header { background: var(--white); padding: 52px 20px 16px; border-bottom: 1px solid #E8F0EB; z-index: 10; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }

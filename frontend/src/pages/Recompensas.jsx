@@ -60,15 +60,21 @@ export default function Recompensas() {
           const pend = o.estado !== "Completado";
           return (
             <div key={o.id} className={`hist-item${pend ? " pendiente" : ""}`}>
-              <div className="hist-left">
-                <div className="hist-title">{o.titulo}</div>
-                <div className="hist-date">
-                  {fmtFecha(o.fecha)} • Gestor: {o.gestorNombre}
+              <div className="hist-main">
+                <div className="hist-left">
+                  <div className="hist-title">{o.titulo}</div>
+                  <div className="hist-date">
+                    {fmtFecha(o.fecha)} • Gestor: {o.gestorNombre}
+                  </div>
+                </div>
+                <div className="hist-right">
+                  <div className="hist-pts">+ {o.puntos} pts</div>
+                  <div className={`hist-status${pend ? " pendiente" : ""}`}>{o.estado}</div>
                 </div>
               </div>
-              <div className="hist-right">
-                <div className="hist-pts">+ {o.puntos} pts</div>
-                <div className={`hist-status${pend ? " pendiente" : ""}`}>{o.estado}</div>
+              <div className="hist-contact">
+                <div className="hist-contact-btn chat">💬 Chat</div>
+                <div className="hist-contact-btn llamar">📞 Llamar</div>
               </div>
             </div>
           );
