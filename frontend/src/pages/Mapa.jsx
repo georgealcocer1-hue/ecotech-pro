@@ -2,13 +2,17 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../services/api.js";
 
-const FILTROS = ["Todos", "Reciclaje", "Reparación", "Recolección"];
+const SERVICIOS = [
+  { id: "Reciclaje",   icon: "♻️",  color: "green", desc: "Gestión de residuos RAEE" },
+  { id: "Reparación",  icon: "🔧",  color: "amber", desc: "Reparación de equipos"    },
+  { id: "Diagnóstico", icon: "🔍",  color: "blue",  desc: "Evaluación técnica"        },
+];
 
 export default function Mapa() {
   const navigate = useNavigate();
-  const [gestores, setGestores] = useState([]);
+  const [todosGestores, setTodosGestores] = useState([]);
   const [perfil, setPerfil] = useState(null);
-  const [filtro, setFiltro] = useState("Todos");
+  const [servicioActivo, setServicioActivo] = useState(null);
   const [busqueda, setBusqueda] = useState("");
   const [cargando, setCargando] = useState(true);
   const [pendientes, setPendientes] = useState([]);
@@ -18,19 +22,26 @@ export default function Mapa() {
     api.getOrdenes()
       .then((ords) => setPendientes(ords.filter((o) => o.estado !== "Completado")))
       .catch(() => {});
-  }, []);
-
-  useEffect(() => {
-    setCargando(true);
-    api.getGestores(filtro).then((data) => {
-      setGestores(data);
+    api.getGestores("Todos").then((data) => {
+      setTodosGestores(data);
       setCargando(false);
     });
-  }, [filtro]);
+  }, []);
 
-  const visibles = gestores.filter((g) =>
-    g.nombre.toLowerCase().includes(busqueda.toLowerCase())
-  );
+  const seleccionarServicio = (id) => {
+    setServicioActivo((prev) => (prev === id ? null : id));
+    setBusqueda("");
+  };
+
+  const gestoresFiltrados = todosGestores.filter((g) => {
+    const porServicio = servicioActivo
+      ? g.servicios?.some((s) => s.label === servicioActivo)
+      : false;
+    const porBusqueda = g.nombre.toLowerCase().includes(busqueda.toLowerCase());
+    return porServicio && porBusqueda;
+  });
+
+  const servicioInfo = SERVICIOS.find((s) => s.id === servicioActivo);
 
   return (
     <>
@@ -48,7 +59,8 @@ export default function Mapa() {
           <input
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
-            placeholder="Buscar gestores, zonas, servicios…"
+            placeholder="Buscar empresa…"
+            disabled={!servicioActivo}
           />
         </div>
       </div>
@@ -61,7 +73,7 @@ export default function Mapa() {
         <div className="map-road-v" style={{ left: "22%", top: 0, height: "100%" }} />
         <div className="map-road-v" style={{ left: "55%", top: 0, height: "100%" }} />
         <div className="map-road-v" style={{ left: "80%", top: 0, height: "100%" }} />
-        {gestores.map((g) => (
+        {todosGestores.map((g) => (
           <div
             key={g.id}
             className="map-marker"
@@ -77,24 +89,22 @@ export default function Mapa() {
         <div className="map-my-loc" />
       </div>
 
-      <div className="s1-pills">
-        {FILTROS.map((f) => (
+      {/* ── Botones de servicio ── */}
+      <div className="s1-servicios">
+        {SERVICIOS.map((s) => (
           <div
-            key={f}
-            className={`pill${filtro === f ? " active" : ""}`}
-            onClick={() => setFiltro(f)}
+            key={s.id}
+            className={`servicio-btn ${s.color}${servicioActivo === s.id ? " active" : ""}`}
+            onClick={() => seleccionarServicio(s.id)}
           >
-            {f}
+            <div className="servicio-btn-icon">{s.icon}</div>
+            <div className="servicio-btn-label">{s.id}</div>
+            <div className="servicio-btn-desc">{s.desc}</div>
           </div>
         ))}
       </div>
 
-      {filtro !== "Todos" && !cargando && (
-        <div className="s1-filtro-info">
-          {visibles.length} gestor{visibles.length !== 1 ? "es" : ""} · {filtro}
-        </div>
-      )}
-
+      {/* ── Solicitudes pendientes ── */}
       {pendientes.length > 0 && (
         <div className="s1-pendientes">
           <div className="s1-pendientes-title">Solicitudes pendientes</div>
@@ -111,29 +121,48 @@ export default function Mapa() {
         </div>
       )}
 
-      <div className="s1-card-row">
-        {cargando && <div className="loading">Cargando gestores…</div>}
-        {!cargando && visibles.length === 0 && (
-          <div className="loading">No se encontraron gestores.</div>
-        )}
-        {visibles.map((g, i) => (
-          <div
-            key={g.id}
-            className="s1-manager-card"
-            onClick={() => navigate(`/gestor/${g.id}`)}
-          >
-            <div className={`manager-icon-box${i % 2 ? " amber-bg" : ""}`}>{g.icon}</div>
-            <div className="manager-info">
-              <div className="manager-name">{g.nombre}</div>
-              <div className="manager-type">{g.etiquetaTipo}</div>
-              <div className="manager-dist">
-                📍 {g.distanciaKm} km · {g.abierto ? "Abierto ahora" : "Cerrado"}
-              </div>
+      {/* ── Lista de empresas (solo cuando hay servicio activo) ── */}
+      {servicioActivo && (
+        <div className="s1-lista-section">
+          <div className="s1-lista-header">
+            <div className="s1-lista-title">
+              {servicioInfo?.icon} {servicioActivo}
             </div>
-            <div className={`manager-badge${i % 2 ? " cert" : ""}`}>{g.rating} ⭐</div>
+            <div className="s1-lista-count">
+              {gestoresFiltrados.length} empresa{gestoresFiltrados.length !== 1 ? "s" : ""}
+            </div>
           </div>
-        ))}
-      </div>
+
+          {cargando && <div className="loading">Cargando…</div>}
+          {!cargando && gestoresFiltrados.length === 0 && (
+            <div className="loading">Sin empresas disponibles para este servicio.</div>
+          )}
+
+          <div className="s1-card-col">
+            {gestoresFiltrados.map((g, i) => (
+              <div
+                key={g.id}
+                className="s1-manager-card"
+                onClick={() =>
+                  navigate(
+                    `/gestor/${g.id}?servicio=${encodeURIComponent(servicioActivo)}`
+                  )
+                }
+              >
+                <div className={`manager-icon-box${i % 2 ? " amber-bg" : ""}`}>{g.icon}</div>
+                <div className="manager-info">
+                  <div className="manager-name">{g.nombre}</div>
+                  <div className="manager-type">{g.etiquetaTipo}</div>
+                  <div className="manager-dist">
+                    📍 {g.distanciaKm} km · {g.abierto ? "Abierto ahora" : "Cerrado"}
+                  </div>
+                </div>
+                <div className={`manager-badge${i % 2 ? " cert" : ""}`}>{g.rating} ⭐</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </>
   );
 }

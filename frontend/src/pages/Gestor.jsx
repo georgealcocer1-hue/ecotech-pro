@@ -7,17 +7,11 @@ const tagColors = ["green", "blue", "green", "orange", "blue"];
 export default function Gestor() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
+  const servicioParam = searchParams.get("servicio");
+
   const [gestor, setGestor] = useState(null);
   const [error, setError] = useState(null);
-  const [servicioSeleccionado, setServicioSeleccionado] = useState(
-    searchParams.get("servicio") || null
-  );
-
-  const seleccionar = (label) => {
-    setServicioSeleccionado(label);
-    setSearchParams({ servicio: label }, { replace: true });
-  };
 
   useEffect(() => {
     api.getGestor(id).then(setGestor).catch((e) => setError(e.message));
@@ -56,21 +50,11 @@ export default function Gestor() {
         ))}
       </div>
 
-      <div className="s2-section">
-        <div className="s2-section-title">Servicios Disponibles</div>
-        <div className="s2-services">
-          {gestor.servicios.map((s) => (
-            <div
-              key={s.label}
-              className={`service-chip${servicioSeleccionado === s.label ? " active" : ""}`}
-              onClick={() => seleccionar(s.label)}
-            >
-              <div className="s-icon">{s.icon}</div>
-              <div className="s-label">{s.label}</div>
-            </div>
-          ))}
+      {servicioParam && (
+        <div className="s2-servicio-activo">
+          Servicio solicitado: <strong>{servicioParam}</strong>
         </div>
-      </div>
+      )}
 
       <div className="s2-schedule">
         <div className="schedule-title">Horario de atención</div>
@@ -85,9 +69,16 @@ export default function Gestor() {
 
       <button
         className="s2-cta"
-        onClick={() => navigate(`/registrar/${gestor.id}${servicioSeleccionado ? `?servicio=${encodeURIComponent(servicioSeleccionado)}` : ""}`)}>
+        onClick={() =>
+          navigate(
+            `/registrar/${gestor.id}${servicioParam ? `?servicio=${encodeURIComponent(servicioParam)}` : ""}`
+          )
+        }
+      >
         <div>
-          <div className="s2-cta-title">Solicitar Recolección</div>
+          <div className="s2-cta-title">
+            {servicioParam ? `Solicitar ${servicioParam}` : "Solicitar Recolección"}
+          </div>
           <div className="s2-cta-sub">Agenda en menos de 2 min</div>
         </div>
         <div className="s2-cta-btn">Solicitar →</div>
