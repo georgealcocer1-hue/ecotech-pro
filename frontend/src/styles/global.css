@@ -333,8 +333,12 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .s5-title { font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 700; color: var(--green-deep); }
 .s5-form-content { padding: 16px; }
 .s5-servicio-badge { background: var(--green-mid); color: white; border-radius: 10px; padding: 10px 14px; font-size: 12px; margin-bottom: 14px; }
+.s5-servicio-badge.diagnostico { background: #1E3A5F; }
 .s5-servicio-badge strong { font-weight: 700; }
 .s5-reg-card { background: var(--green-pale); border-radius: 14px; padding: 14px; display: flex; gap: 12px; align-items: flex-start; margin-bottom: 18px; border: 1px solid rgba(82,183,136,0.3); }
+.s5-reg-card.diagnostico { background: #EFF6FF; border-color: #BFDBFE; }
+.s5-reg-card.diagnostico .s5-reg-text { color: #1E3A5F; }
+.s5-reg-card.diagnostico .s5-reg-text strong { color: #1E40AF; }
 .s5-reg-icon { font-size: 24px; }
 .s5-reg-text { font-size: 10px; color: var(--green-mid); line-height: 1.4; }
 .s5-reg-text strong { font-weight: 700; color: var(--green-deep); }

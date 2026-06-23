@@ -29,6 +29,7 @@ export const seed = {
         { icon: "♻️", label: "Reciclaje" },
         { icon: "🚛", label: "Recolección" },
         { icon: "🔧", label: "Reparación" },
+        { icon: "🔍", label: "Diagnóstico" },
       ],
       horario: [
         { dia: "Lun – Vie", horas: "08:00 – 18:00", disponible: true },
@@ -58,6 +59,7 @@ export const seed = {
         { icon: "🔧", label: "Reparación" },
         { icon: "🚛", label: "Recolección" },
         { icon: "🔋", label: "Baterías" },
+        { icon: "🔍", label: "Diagnóstico" },
       ],
       horario: [
         { dia: "Lun – Vie", horas: "09:00 – 17:00", disponible: true },
@@ -87,6 +89,7 @@ export const seed = {
         { icon: "🚛", label: "Recolección" },
         { icon: "📦", label: "Logística" },
         { icon: "♻️", label: "Reciclaje" },
+        { icon: "🔍", label: "Diagnóstico" },
       ],
       horario: [
         { dia: "Lun – Vie", horas: "07:00 – 16:00", disponible: true },

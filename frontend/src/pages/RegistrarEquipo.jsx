@@ -13,6 +13,7 @@ export default function RegistrarEquipo() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const servicioParam = searchParams.get("servicio");
+  const esDiagnostico = servicioParam === "Diagnóstico";
 
   const hoy = new Date().toISOString().slice(0, 10);
 
@@ -51,22 +52,36 @@ export default function RegistrarEquipo() {
         <button className="s5-back" onClick={() => navigate(-1)}>
           ←
         </button>
-        <div className="s5-title">Registrar Equipo</div>
+        <div className="s5-title">
+          {esDiagnostico ? "Solicitar Diagnóstico" : "Registrar Equipo"}
+        </div>
       </div>
 
       <div className="s5-form-content">
-        <div className="s5-reg-card">
-          <div className="s5-reg-icon">📜</div>
-          <div className="s5-reg-text">
-            <strong>Gestión Regulada</strong>
-            <br />
-            Proceso alineado a las normativas ambientales para la recolección formal de
-            residuos en Guayaquil (Ordenanza GAD y estándares ISO 14001).
+        {esDiagnostico ? (
+          <div className="s5-reg-card diagnostico">
+            <div className="s5-reg-icon">🔍</div>
+            <div className="s5-reg-text">
+              <strong>Diagnóstico Técnico</strong>
+              <br />
+              Un especialista evaluará tus equipos para determinar la mejor opción: reparación,
+              reciclaje o disposición final. Recibirás un informe en 48 h hábiles.
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="s5-reg-card">
+            <div className="s5-reg-icon">📜</div>
+            <div className="s5-reg-text">
+              <strong>Gestión Regulada</strong>
+              <br />
+              Proceso alineado a las normativas ambientales para la recolección formal de
+              residuos en Guayaquil (Ordenanza GAD y estándares ISO 14001).
+            </div>
+          </div>
+        )}
 
         {servicioParam && (
-          <div className="s5-servicio-badge">
+          <div className={`s5-servicio-badge${esDiagnostico ? " diagnostico" : ""}`}>
             Servicio seleccionado: <strong>{servicioParam}</strong>
           </div>
         )}
@@ -83,20 +98,22 @@ export default function RegistrarEquipo() {
             />
           </div>
 
-          <div className="form-group">
-            <label className="form-label">Estado del Equipo</label>
-            <div className="estado-pills">
-              {ESTADOS.map((es) => (
-                <div
-                  key={es.id}
-                  className={`estado-pill${form.estado === es.id ? " active" : ""}`}
-                  onClick={() => setForm({ ...form, estado: es.id })}
-                >
-                  <span>{es.emoji}</span> {es.label}
-                </div>
-              ))}
+          {!esDiagnostico && (
+            <div className="form-group">
+              <label className="form-label">Estado del Equipo</label>
+              <div className="estado-pills">
+                {ESTADOS.map((es) => (
+                  <div
+                    key={es.id}
+                    className={`estado-pill${form.estado === es.id ? " active" : ""}`}
+                    onClick={() => setForm({ ...form, estado: es.id })}
+                  >
+                    <span>{es.emoji}</span> {es.label}
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="form-row">
             <div className="form-group">
@@ -131,7 +148,9 @@ export default function RegistrarEquipo() {
           </div>
 
           <div className="form-group">
-            <label className="form-label">Fecha preferida de recolección</label>
+            <label className="form-label">
+              {esDiagnostico ? "Fecha preferida de diagnóstico" : "Fecha preferida de recolección"}
+            </label>
             <input
               type="date"
               className="form-input"
@@ -145,14 +164,22 @@ export default function RegistrarEquipo() {
             <label className="form-label">Comentarios detallados</label>
             <textarea
               className="form-input"
-              placeholder="Especifica si faltan piezas, si las baterías están infladas, daños visibles, etc."
+              placeholder={
+                esDiagnostico
+                  ? "Describe los síntomas: no enciende, pantalla dañada, batería inflada, sin respuesta, etc. Cuanta más información, mejor el diagnóstico."
+                  : "Especifica si faltan piezas, si las baterías están infladas, daños visibles, etc."
+              }
               value={form.comentarios}
               onChange={set("comentarios")}
             />
           </div>
 
           <button type="submit" className="s5-submit-btn" disabled={enviando}>
-            {enviando ? "Enviando…" : "Añadir a la Recolección"}
+            {enviando
+              ? "Enviando…"
+              : esDiagnostico
+              ? "Solicitar Diagnóstico"
+              : "Añadir a la Recolección"}
           </button>
         </form>
       </div>
