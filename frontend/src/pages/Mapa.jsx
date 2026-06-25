@@ -20,7 +20,7 @@ export default function Mapa() {
   useEffect(() => {
     api.getPerfil().then(setPerfil).catch(() => {});
     api.getOrdenes()
-      .then((ords) => setPendientes(ords.filter((o) => o.estado !== "Completado")))
+      .then((ords) => setPendientes(ords.filter((o) => o.estado === "Pendiente")))
       .catch(() => {});
     api.getGestores("Todos").then((data) => {
       setTodosGestores(data);
@@ -33,14 +33,19 @@ export default function Mapa() {
     setBusqueda("");
   };
 
+  const hayBusqueda = busqueda.trim().length > 0;
+
   const gestoresFiltrados = todosGestores.filter((g) => {
     const porServicio = servicioActivo
       ? g.servicios?.some((s) => s.label === servicioActivo)
-      : false;
-    const porBusqueda = g.nombre.toLowerCase().includes(busqueda.toLowerCase());
+      : true;
+    const porBusqueda = hayBusqueda
+      ? g.nombre.toLowerCase().includes(busqueda.toLowerCase())
+      : true;
     return porServicio && porBusqueda;
   });
 
+  const mostrarLista = !!servicioActivo || hayBusqueda;
   const servicioInfo = SERVICIOS.find((s) => s.id === servicioActivo);
 
   return (
@@ -60,7 +65,6 @@ export default function Mapa() {
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
             placeholder="Buscar empresa…"
-            disabled={!servicioActivo}
           />
         </div>
       </div>
@@ -78,7 +82,12 @@ export default function Mapa() {
             key={g.id}
             className="map-marker"
             style={{ top: g.mapa.top, left: g.mapa.left }}
-            onClick={() => navigate(`/gestor/${g.id}`)}
+            onClick={() => {
+              const servicio =
+                servicioActivo ||
+                g.servicios?.find((s) => SERVICIOS.some((sv) => sv.id === s.label))?.label;
+              navigate(`/gestor/${g.id}${servicio ? `?servicio=${encodeURIComponent(servicio)}` : ""}`);
+            }}
           >
             <div className={`marker-pin ${g.mapa.color}`}>
               <span>{g.icon}</span>
@@ -103,6 +112,11 @@ export default function Mapa() {
           </div>
         ))}
       </div>
+      {!servicioActivo && !hayBusqueda && (
+        <div className="s1-servicio-hint">
+          Selecciona un servicio o busca una empresa para comenzar
+        </div>
+      )}
 
       {/* ── Solicitudes pendientes ── */}
       {pendientes.length > 0 && (
@@ -121,12 +135,12 @@ export default function Mapa() {
         </div>
       )}
 
-      {/* ── Lista de empresas (solo cuando hay servicio activo) ── */}
-      {servicioActivo && (
+      {/* ── Lista de empresas ── */}
+      {mostrarLista && (
         <div className="s1-lista-section">
           <div className="s1-lista-header">
             <div className="s1-lista-title">
-              {servicioInfo?.icon} {servicioActivo}
+              {servicioInfo ? `${servicioInfo.icon} ${servicioActivo}` : `🔍 "${busqueda}"`}
             </div>
             <div className="s1-lista-count">
               {gestoresFiltrados.length} empresa{gestoresFiltrados.length !== 1 ? "s" : ""}
@@ -142,7 +156,7 @@ export default function Mapa() {
             {gestoresFiltrados.map((g, i) => (
               <div
                 key={g.id}
-                className="s1-manager-card"
+                className={`s1-manager-card${g.abierto ? "" : " cerrado"}`}
                 onClick={() =>
                   navigate(
                     `/gestor/${g.id}?servicio=${encodeURIComponent(servicioActivo)}`
@@ -154,7 +168,9 @@ export default function Mapa() {
                   <div className="manager-name">{g.nombre}</div>
                   <div className="manager-type">{g.etiquetaTipo}</div>
                   <div className="manager-dist">
-                    📍 {g.distanciaKm} km · {g.abierto ? "Abierto ahora" : "Cerrado"}
+                    📍 {g.distanciaKm} km ·{" "}
+                    <span className={`estado-dot${g.abierto ? " abierto" : " cerrado"}`} />
+                    {g.abierto ? "Abierto" : "Cerrado"}
                   </div>
                 </div>
                 <div className={`manager-badge${i % 2 ? " cert" : ""}`}>{g.rating} ⭐</div>

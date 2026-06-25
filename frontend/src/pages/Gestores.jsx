@@ -33,7 +33,7 @@ export default function Gestores() {
         {gestores.map((g, i) => (
           <div
             key={g.id}
-            className="s1-manager-card"
+            className={`s1-manager-card${g.abierto ? "" : " cerrado"}`}
             onClick={() => navigate(`/gestor/${g.id}`)}
           >
             <div className={`manager-icon-box${i % 2 ? " amber-bg" : ""}`}>{g.icon}</div>
@@ -41,7 +41,9 @@ export default function Gestores() {
               <div className="manager-name">{g.nombre}</div>
               <div className="manager-type">{g.etiquetaTipo}</div>
               <div className="manager-dist">
-                📍 {g.distanciaKm} km · {g.abierto ? "Abierto ahora" : "Cerrado"}
+                📍 {g.distanciaKm} km ·{" "}
+                <span className={`estado-dot${g.abierto ? " abierto" : " cerrado"}`} />
+                {g.abierto ? "Abierto" : "Cerrado"}
               </div>
             </div>
             <div className={`manager-badge${i % 2 ? " cert" : ""}`}>{g.rating} ⭐</div>

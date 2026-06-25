@@ -27,6 +27,8 @@ export const api = {
   getOrdenes: () => request("/ordenes"),
   crearOrden: (data) =>
     request("/ordenes", { method: "POST", body: JSON.stringify(data) }),
+  cancelarOrden: (id) =>
+    request(`/ordenes/${id}`, { method: "PATCH", body: JSON.stringify({ estado: "Cancelado" }) }),
 
   canjearRecompensa: () =>
     request("/perfil/canjear", { method: "POST", body: JSON.stringify({}) }),

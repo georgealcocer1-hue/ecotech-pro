@@ -27,13 +27,13 @@ router.post("/", (req, res) => {
   res.json(construirResumen(db));
 });
 
-// Calcula el desglose de la factura (subtotal, IVA 16%, descuento, total).
+// Calcula el desglose de la factura (subtotal, IVA 15% Ecuador, descuento, total).
 function construirResumen(db) {
   const { suscripcion, planes } = db;
   const plan = planes.find((p) => p.id === suscripcion.planId) || planes[0];
   const anual = suscripcion.ciclo === "anual";
   const subtotal = anual ? plan.precioAnual : plan.precioMensual;
-  const iva = Math.round(subtotal * 0.16 * 100) / 100;
+  const iva = Math.round(subtotal * 0.15 * 100) / 100;
   const descuento = Math.round(subtotal * 0.1 * 100) / 100; // 10% primer periodo
   const total = Math.round((subtotal + iva - descuento) * 100) / 100;
 

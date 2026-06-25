@@ -28,6 +28,7 @@ export default function RegistrarEquipo() {
   });
   const [enviando, setEnviando] = useState(false);
   const [toast, setToast] = useState("");
+  const [ordenExitosa, setOrdenExitosa] = useState(null);
 
   const set = (campo) => (e) => setForm({ ...form, [campo]: e.target.value });
 
@@ -38,12 +39,34 @@ export default function RegistrarEquipo() {
     try {
       const equipo = servicioParam ? { ...form, servicio: servicioParam } : form;
       const orden = await api.crearOrden({ gestorId, equipo });
-      setToast(`✓ Registrado · +${orden.puntos} pts`);
-      setTimeout(() => navigate("/recompensas"), 1400);
+      setOrdenExitosa(orden);
     } catch (err) {
       setToast(err.message);
       setEnviando(false);
     }
+  }
+
+  if (ordenExitosa) {
+    return (
+      <div className="s5-success">
+        <div className="s5-success-icon">✅</div>
+        <div className="s5-success-title">¡Solicitud enviada!</div>
+        <div className="s5-success-sub">
+          <strong>{ordenExitosa.titulo}</strong>
+          <br />Gestor: {ordenExitosa.gestorNombre}
+          <br />Ref: #{ordenExitosa.id}
+        </div>
+        <div className="s5-success-pts">+{ordenExitosa.puntos} puntos ganados 🎯</div>
+        <div className="s5-success-actions">
+          <button className="s5-success-btn-primary" onClick={() => navigate("/recompensas")}>
+            Ver mis solicitudes
+          </button>
+          <button className="s5-success-btn-secondary" onClick={() => navigate("/")}>
+            Nueva solicitud
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -188,3 +211,4 @@ export default function RegistrarEquipo() {
     </>
   );
 }
+

@@ -15,6 +15,7 @@ export default function Suscripcion() {
   const [planes, setPlanes] = useState([]);
   const [sus, setSus] = useState(null);
   const [toast, setToast] = useState("");
+  const [pendientePlanId, setPendientePlanId] = useState(null);
 
   useEffect(() => {
     api.getPlanes().then(setPlanes);
@@ -88,7 +89,7 @@ export default function Suscripcion() {
               </div>
               <div
                 className={`plan-btn${p.featured ? " solid" : " outline"}`}
-                onClick={() => actualizar({ planId: p.id })}
+                onClick={() => elegido ? null : setPendientePlanId(p.id)}
               >
                 {elegido ? "✓ Plan actual" : `Elegir ${p.nombre}`}
               </div>
@@ -118,7 +119,7 @@ export default function Suscripcion() {
             <span>{fmt(sus.factura.subtotal)}</span>
           </div>
           <div className="inv-row">
-            <span>IVA 16%</span>
+            <span>IVA 15%</span>
             <span>{fmt(sus.factura.iva)}</span>
           </div>
           <div className="inv-row">
@@ -133,6 +134,36 @@ export default function Suscripcion() {
       </div>
 
       {toast && <div className="toast">{toast}</div>}
+
+      {/* ── Confirmación de cambio de plan ── */}
+      {pendientePlanId && (() => {
+        const p = planes.find((pl) => pl.id === pendientePlanId);
+        const precio = anual ? p?.precioAnual : p?.precioMensual;
+        return (
+          <div
+            className="sus-confirm-overlay"
+            onClick={(e) => e.target === e.currentTarget && setPendientePlanId(null)}
+          >
+            <div className="sus-confirm-sheet">
+              <div className="sus-confirm-title">Cambiar plan</div>
+              <div className="sus-confirm-body">
+                Estás a punto de cambiar al plan <strong>{p?.nombre}</strong>.
+                <br />Tu nueva factura será de{" "}
+                <strong>{fmt(precio)}/{anual ? "año" : "mes"}</strong> + IVA 15%.
+              </div>
+              <button
+                className="sus-confirm-btn-yes"
+                onClick={() => { actualizar({ planId: pendientePlanId }); setPendientePlanId(null); }}
+              >
+                Confirmar cambio
+              </button>
+              <button className="sus-confirm-btn-no" onClick={() => setPendientePlanId(null)}>
+                Cancelar
+              </button>
+            </div>
+          </div>
+        );
+      })()}
     </>
   );
 }

@@ -47,4 +47,21 @@ router.post("/", (req, res) => {
   res.status(201).json(nuevaOrden);
 });
 
+// PATCH /api/ordenes/:id — cambia el estado de una orden (ej. "Cancelado")
+router.patch("/:id", (req, res) => {
+  const { estado } = req.body || {};
+  if (!estado) return res.status(400).json({ error: "Falta el estado" });
+
+  const db = readDb();
+  const idx = db.ordenes.findIndex((o) => o.id === req.params.id);
+  if (idx === -1) return res.status(404).json({ error: "Orden no encontrada" });
+
+  if (estado === "Cancelado") {
+    db.perfil.puntos = Math.max(0, db.perfil.puntos - (db.ordenes[idx].puntos || 0));
+  }
+  db.ordenes[idx].estado = estado;
+  writeDb(db);
+  res.json(db.ordenes[idx]);
+});
+
 export default router;

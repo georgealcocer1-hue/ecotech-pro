@@ -27,14 +27,20 @@ export default function Recompensas() {
   const [recompensaElegida, setRecompensaElegida] = useState(null);
   const [canjeando, setCanjeando] = useState(false);
 
-  // Chat
+  // Chat (persiste en localStorage)
   const [chatOrden, setChatOrden] = useState(null);
-  const [chatMensajes, setChatMensajes] = useState({});
+  const [chatMensajes, setChatMensajes] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("ecored_chat") || "{}"); } catch { return {}; }
+  });
   const [chatInput, setChatInput] = useState("");
   const chatBottomRef = useRef(null);
 
   // Llamar
   const [llamarGestor, setLlamarGestor] = useState(null);
+
+  // Cancelar solicitud
+  const [cancelandoId, setCancelandoId] = useState(null);
+  const [cancelando, setCancelando] = useState(false);
 
   const cargarPerfil = () => api.getPerfil().then(setPerfil);
 
@@ -52,6 +58,10 @@ export default function Recompensas() {
   useEffect(() => {
     chatBottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatMensajes, chatOrden]);
+
+  useEffect(() => {
+    localStorage.setItem("ecored_chat", JSON.stringify(chatMensajes));
+  }, [chatMensajes]);
 
   const abrirChat = (orden) => {
     setChatOrden(orden);
@@ -95,6 +105,19 @@ export default function Recompensas() {
       });
     }
   };
+
+  async function cancelar(id) {
+    setCancelando(true);
+    try {
+      await api.cancelarOrden(id);
+      const [nuevasOrdenes, nuevoPerfil] = await Promise.all([api.getOrdenes(), api.getPerfil()]);
+      setOrdenes(nuevasOrdenes);
+      setPerfil(nuevoPerfil);
+      setCancelandoId(null);
+    } finally {
+      setCancelando(false);
+    }
+  }
 
   async function canjear() {
     if (!recompensaElegida) return;
@@ -196,14 +219,37 @@ export default function Recompensas() {
                     <div className={`hist-status${pend ? " pendiente" : ""}`}>{o.estado}</div>
                   </div>
                 </div>
-                <div className="hist-contact">
-                  <div className="hist-contact-btn chat" onClick={() => abrirChat(o)}>
-                    💬 Chat
+                {o.estado !== "Cancelado" && (
+                  <div className="hist-contact">
+                    <div className="hist-contact-btn chat" onClick={() => abrirChat(o)}>
+                      💬 Chat
+                    </div>
+                    <div className="hist-contact-btn llamar" onClick={() => abrirLlamar(o)}>
+                      📞 Llamar
+                    </div>
                   </div>
-                  <div className="hist-contact-btn llamar" onClick={() => abrirLlamar(o)}>
-                    📞 Llamar
-                  </div>
-                </div>
+                )}
+                {o.estado === "Pendiente" && (
+                  cancelandoId === o.id ? (
+                    <div className="hist-cancel-confirm">
+                      <span>¿Cancelar esta solicitud?</span>
+                      <button
+                        className="hist-cancel-yes"
+                        onClick={() => cancelar(o.id)}
+                        disabled={cancelando}
+                      >
+                        {cancelando ? "…" : "Sí, cancelar"}
+                      </button>
+                      <button className="hist-cancel-no" onClick={() => setCancelandoId(null)}>
+                        No
+                      </button>
+                    </div>
+                  ) : (
+                    <button className="hist-cancel-btn" onClick={() => setCancelandoId(o.id)}>
+                      Cancelar solicitud
+                    </button>
+                  )
+                )}
               </div>
             );
           })
