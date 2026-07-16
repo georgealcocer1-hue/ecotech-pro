@@ -193,7 +193,7 @@ export default function Recompensas() {
             <div className="hist-empty-sub">
               Registra tu primer equipo para empezar a acumular puntos ambientales.
             </div>
-            <button className="hist-empty-btn" onClick={() => navigate("/")}>
+            <button className="hist-empty-btn" onClick={() => navigate("/mapa")}>
               Buscar gestor →
             </button>
           </div>

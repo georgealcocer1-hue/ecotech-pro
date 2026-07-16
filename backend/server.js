@@ -9,6 +9,7 @@ import planesRouter from "./src/routes/planes.js";
 import perfilRouter from "./src/routes/perfil.js";
 import ordenesRouter from "./src/routes/ordenes.js";
 import suscripcionRouter from "./src/routes/suscripcion.js";
+import infoRouter from "./src/routes/info.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -26,6 +27,7 @@ app.use("/api/planes", planesRouter);
 app.use("/api/perfil", perfilRouter);
 app.use("/api/ordenes", ordenesRouter);
 app.use("/api/suscripcion", suscripcionRouter);
+app.use("/api/info", infoRouter);
 
 // En producción servimos la app React compilada (frontend/dist) desde el mismo
 // servidor, de modo que /api y la web comparten origen (sin CORS ni proxy).

@@ -24,6 +24,8 @@ export const api = {
 
   getPerfil: () => request("/perfil"),
 
+  getInfo: () => request("/info"),
+
   getOrdenes: () => request("/ordenes"),
   crearOrden: (data) =>
     request("/ordenes", { method: "POST", body: JSON.stringify(data) }),

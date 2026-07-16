@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import PhoneFrame from "./components/PhoneFrame.jsx";
+import Home from "./pages/Home.jsx";
 import Mapa from "./pages/Mapa.jsx";
 import Gestores from "./pages/Gestores.jsx";
 import Gestor from "./pages/Gestor.jsx";
@@ -11,7 +12,8 @@ export default function App() {
   return (
     <Routes>
       <Route element={<PhoneFrame />}>
-        <Route path="/" element={<Mapa />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/mapa" element={<Mapa />} />
         <Route path="/gestores" element={<Gestores />} />
         <Route path="/gestor/:id" element={<Gestor />} />
         <Route path="/suscripcion" element={<Suscripcion />} />

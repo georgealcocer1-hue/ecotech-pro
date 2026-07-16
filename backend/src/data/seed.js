@@ -174,4 +174,65 @@ export const seed = {
     ciclo: "mensual",
     metodoPago: "tarjeta",
   },
+
+  // Información educativa sobre RAEE en Ecuador para la pantalla de inicio.
+  // Fuentes: Global E-waste Monitor (ONU), MAATE, Alcaldía de Guayaquil,
+  // Acuerdo Ministerial MAATE-2022-067 (R.O. Suplemento 117, 1-ago-2022).
+  infoRaee: {
+    cifras: [
+      { valor: "87.575", unidad: "t/año", texto: "de residuos electrónicos genera Ecuador", icon: "🏭" },
+      { valor: "5,1", unidad: "kg/hab", texto: "de e-waste por ecuatoriano cada año", icon: "👤" },
+      { valor: "4%", unidad: "", texto: "apenas ingresa a reciclaje formal", icon: "♻️" },
+      { valor: "257", unidad: "puntos", texto: "de recolección RAEE a nivel nacional", icon: "📍" },
+    ],
+    sabiasQue: [
+      {
+        icon: "📱",
+        texto: "Los celulares en desuso tienen una meta de recolección del 3% en Ecuador, la más alta de todos los RAEE según el AM MAATE-2022-067.",
+      },
+      {
+        icon: "🗑️",
+        texto: "El 96% de los residuos electrónicos del país termina en botaderos, quemado o almacenado, liberando plomo, mercurio y cadmio al ambiente.",
+      },
+      {
+        icon: "💎",
+        texto: "Una tonelada de celulares contiene hasta 100 veces más oro que una tonelada de mineral extraído de una mina.",
+      },
+      {
+        icon: "🏙️",
+        texto: "Guayaquil cuenta con 7 puntos municipales de recolección de desechos electrónicos, incluyendo el Palacio Municipal y la Biblioteca Municipal.",
+      },
+      {
+        icon: "⚖️",
+        texto: "Desde 2022, los importadores y fabricantes de electrónicos en Ecuador están obligados por ley a recuperar un porcentaje de lo que venden.",
+      },
+    ],
+    normativa: [
+      {
+        icon: "📜",
+        nombre: "AM MAATE-2022-067",
+        desc: "Responsabilidad extendida del productor en la gestión integral de RAEE de origen doméstico",
+      },
+      {
+        icon: "🏛️",
+        nombre: "Ordenanza GAD Guayaquil",
+        desc: "Gestión municipal de residuos sólidos y desechos especiales",
+      },
+      {
+        icon: "🌐",
+        nombre: "ISO 14001",
+        desc: "Estándar internacional de sistemas de gestión ambiental",
+      },
+    ],
+    // Las 6 categorías oficiales de RAEE (Anexo I del AM MAATE-2022-067,
+    // basado en la Directiva 2012/19/UE).
+    categorias: [
+      { icon: "🧊", nombre: "Intercambio de temperatura", ejemplos: "Refrigeradores, aires acondicionados, congeladores" },
+      { icon: "🖥️", nombre: "Monitores y pantallas", ejemplos: "Televisores, monitores, tablets, laptops" },
+      { icon: "💡", nombre: "Lámparas", ejemplos: "Fluorescentes, LED, lámparas de descarga" },
+      { icon: "🔌", nombre: "Grandes aparatos", ejemplos: "Lavadoras, cocinas eléctricas, paneles grandes (+50 cm)" },
+      { icon: "⌨️", nombre: "Pequeños aparatos", ejemplos: "Microondas, planchas, herramientas eléctricas (−50 cm)" },
+      { icon: "📱", nombre: "Informática y telecom", ejemplos: "Celulares, computadoras, impresoras, módems" },
+    ],
+  },
 };

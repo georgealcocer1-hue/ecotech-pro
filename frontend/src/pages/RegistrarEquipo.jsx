@@ -61,7 +61,7 @@ export default function RegistrarEquipo() {
           <button className="s5-success-btn-primary" onClick={() => navigate("/recompensas")}>
             Ver mis solicitudes
           </button>
-          <button className="s5-success-btn-secondary" onClick={() => navigate("/")}>
+          <button className="s5-success-btn-secondary" onClick={() => navigate("/mapa")}>
             Nueva solicitud
           </button>
         </div>
