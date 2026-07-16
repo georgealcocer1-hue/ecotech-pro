@@ -23,6 +23,7 @@ export const api = {
   getPlanes: () => request("/planes"),
 
   getPerfil: () => request("/perfil"),
+  getEstadisticas: () => request("/perfil/estadisticas"),
 
   getInfo: () => request("/info"),
 

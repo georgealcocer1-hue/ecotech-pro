@@ -10,7 +10,19 @@ export const seed = {
     puntos: 8000,
     metaPuntos: 10000,
     recompensasCanjeadas: 0,
+    // RAEE gestionado antes de usar la app (kg). Las órdenes nuevas suman encima.
+    kgHistorico: 12480,
   },
+
+  // Toneladas de RAEE enviadas por otras empresas (para el ranking de la
+  // pantalla de inicio). La empresa del usuario se inserta dinámicamente.
+  rankingEmpresas: [
+    { nombre: "Cervecería del Litoral", toneladas: 48.2 },
+    { nombre: "TechCorp Andina", toneladas: 35.7 },
+    { nombre: "Industrias Delta", toneladas: 9.3 },
+    { nombre: "Farmacéutica Salus", toneladas: 6.1 },
+    { nombre: "Logística Pacífico", toneladas: 3.8 },
+  ],
 
   gestores: [
     {
