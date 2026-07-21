@@ -198,7 +198,8 @@ export default function Recompensas() {
             </button>
           </div>
         ) : (
-          ordenes.map((o) => {
+          <div className="s4-history-grid">
+          {ordenes.map((o) => {
             const pend = o.estado !== "Completado";
             return (
               <div key={o.id} className={`hist-item${pend ? " pendiente" : ""}`}>
@@ -252,7 +253,8 @@ export default function Recompensas() {
                 )}
               </div>
             );
-          })
+          })}
+          </div>
         )}
       </div>
 
