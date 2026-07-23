@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../services/api.js";
+import { GOOGLE_SCRIPT_URL } from "../config.js";
 
 const FACULTADES = [
   "FIEC – Electricidad y Computación",
@@ -33,14 +34,27 @@ export default function Feedback() {
     if (!form.nombre.trim()) return setError("Por favor escribe tu nombre.");
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.correo)) return setError("Escribe un correo válido.");
     setEnviando(true);
+    const payload = {
+      ...form,
+      referido: refOn && ref.nombre.trim() ? ref : null,
+    };
     try {
-      await api.enviarFeedback({
-        ...form,
-        referido: refOn && ref.nombre.trim() ? ref : null,
-      });
+      if (GOOGLE_SCRIPT_URL) {
+        // Guardado en Hoja de Google (Apps Script). Con no-cors no podemos
+        // leer la respuesta, pero la fila se escribe igual.
+        await fetch(GOOGLE_SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload),
+        });
+      } else {
+        // Respaldo: backend local mientras no se configure Google.
+        await api.enviarFeedback(payload);
+      }
       setOk(true);
     } catch (err) {
-      setError(err.message);
+      setError("No se pudo enviar. Revisa tu conexión e inténtalo de nuevo.");
       setEnviando(false);
     }
   }
