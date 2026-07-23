@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { api } from "../services/api.js";
 
 const fmtNum = (n) => Number(n).toLocaleString("es-EC");
 
 // Pantalla de inicio: bienvenida + impacto de la empresa + info educativa RAEE.
 export default function Home() {
+  const navigate = useNavigate();
   const [perfil, setPerfil] = useState(null);
   const [info, setInfo] = useState(null);
   const [stats, setStats] = useState(null);
@@ -37,6 +39,15 @@ export default function Home() {
           Convierte tus residuos electrónicos en impacto positivo
         </div>
       </div>
+
+      {/* ── CTA formulario de feria ── */}
+      <button className="s0-feria-cta" onClick={() => navigate("/feedback")}>
+        <div className="s0-feria-cta-text">
+          <strong>¿Te gustó EcoRed?</strong>
+          <span>Déjanos tu opinión en la feria →</span>
+        </div>
+        <div className="s0-feria-cta-icon">📣</div>
+      </button>
 
       {/* ── Impacto de la empresa ── */}
       <div className="s0-section">

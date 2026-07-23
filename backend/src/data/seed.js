@@ -187,6 +187,9 @@ export const seed = {
     metodoPago: "tarjeta",
   },
 
+  // Respuestas del formulario de feria (opiniones y contactos referidos).
+  feedback: [],
+
   // Información educativa sobre RAEE en Ecuador para la pantalla de inicio.
   // Fuentes: Global E-waste Monitor (ONU), MAATE, Alcaldía de Guayaquil,
   // Acuerdo Ministerial MAATE-2022-067 (R.O. Suplemento 117, 1-ago-2022).

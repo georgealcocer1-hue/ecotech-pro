@@ -2,7 +2,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import NavBar from "./NavBar.jsx";
 
 // Rutas donde NO se muestra la barra de navegación inferior (pantallas de detalle).
-const sinNav = [/^\/gestor\//, /^\/registrar/];
+const sinNav = [/^\/gestor\//, /^\/registrar/, /^\/feedback/, /^\/admin/];
 
 export default function PhoneFrame() {
   const { pathname } = useLocation();

@@ -27,6 +27,10 @@ export const api = {
 
   getInfo: () => request("/info"),
 
+  enviarFeedback: (data) =>
+    request("/feedback", { method: "POST", body: JSON.stringify(data) }),
+  getFeedback: () => request("/feedback"),
+
   getOrdenes: () => request("/ordenes"),
   crearOrden: (data) =>
     request("/ordenes", { method: "POST", body: JSON.stringify(data) }),

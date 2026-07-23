@@ -495,3 +495,41 @@ textarea.form-input { resize: none; height: 70px; }
 .estado-dot.abierto { background: #16A34A; box-shadow: 0 0 5px rgba(22,163,74,0.6); }
 .estado-dot.cerrado { background: var(--slate-light); }
 .s1-manager-card.cerrado { opacity: 0.65; }
+
+/* ══ SCREEN 6 — FORMULARIO FERIA / FEEDBACK ══ */
+/* CTA en Inicio */
+.s0-feria-cta { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: calc(100% - 32px); margin: 14px 16px 2px; padding: 15px 18px; background: linear-gradient(135deg, var(--amber), #e07b10); border-radius: 16px; box-shadow: 0 4px 14px rgba(244,162,37,0.3); text-align: left; }
+.s0-feria-cta-text { display: flex; flex-direction: column; gap: 2px; }
+.s0-feria-cta-text strong { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; color: #fff; }
+.s0-feria-cta-text span { font-size: 12px; color: rgba(255,255,255,0.92); }
+.s0-feria-cta-icon { font-size: 26px; }
+
+/* Formulario */
+.s6-intro { display: flex; gap: 12px; align-items: flex-start; background: var(--green-pale); border: 1px solid rgba(82,183,136,0.3); border-radius: 14px; padding: 14px; margin-bottom: 18px; }
+.s6-intro-icon { font-size: 24px; }
+.s6-intro-text { font-size: 11px; color: var(--green-mid); line-height: 1.5; }
+.s6-intro-text strong { color: var(--green-deep); }
+.s6-section-label { font-family: 'Space Grotesk', sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--slate); margin: 6px 0 10px; }
+.s6-stars { display: flex; gap: 8px; }
+.s6-star { font-size: 32px; color: #D1D9D4; cursor: pointer; transition: transform 0.1s; }
+.s6-star.on { color: var(--amber); }
+.s6-star:active { transform: scale(1.2); }
+.s6-toggle { display: flex; align-items: center; gap: 10px; background: white; border: 1px solid #D1D9D4; border-radius: 12px; padding: 12px 14px; margin: 6px 0 4px; cursor: pointer; font-size: 12px; color: var(--green-deep); font-weight: 600; }
+.s6-toggle input { width: 18px; height: 18px; accent-color: var(--green-accent); flex-shrink: 0; }
+.s6-referido { background: var(--white); border-radius: 14px; padding: 14px 14px 2px; margin-top: 10px; border: 1px dashed var(--green-light); }
+.s6-error { background: #FEF2F2; color: #DC2626; border-radius: 10px; padding: 10px 14px; font-size: 12px; margin-top: 8px; text-align: center; }
+.s6-privacy { font-size: 10px; color: var(--slate-light); text-align: center; margin-top: 12px; line-height: 1.4; }
+
+/* ══ SCREEN 7 — ADMIN / EXPORTAR RESPUESTAS ══ */
+.s7-stats { display: flex; gap: 10px; margin-bottom: 12px; }
+.s7-stat { flex: 1; background: white; border-radius: 14px; padding: 14px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.s7-stat-num { font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 700; color: var(--green-mid); }
+.s7-stat-lbl { font-size: 10px; color: var(--slate-light); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+.s7-lista { display: flex; flex-direction: column; gap: 8px; margin-top: 18px; }
+.s7-item { background: white; border-radius: 12px; padding: 12px 14px; box-shadow: 0 1px 5px rgba(0,0,0,0.05); border-left: 3px solid var(--green-light); }
+.s7-item-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.s7-item-nombre { font-size: 13px; font-weight: 700; color: var(--green-deep); }
+.s7-item-rating { font-size: 12px; color: var(--amber); flex-shrink: 0; }
+.s7-item-sub { font-size: 10px; color: var(--slate-light); margin-top: 2px; }
+.s7-item-com { font-size: 11px; color: var(--slate); margin-top: 6px; font-style: italic; line-height: 1.4; }
+.s7-item-ref { font-size: 10px; color: var(--green-accent); font-weight: 600; margin-top: 6px; background: var(--green-pale); border-radius: 8px; padding: 5px 8px; }

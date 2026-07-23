@@ -7,6 +7,8 @@ import Gestor from "./pages/Gestor.jsx";
 import Suscripcion from "./pages/Suscripcion.jsx";
 import Recompensas from "./pages/Recompensas.jsx";
 import RegistrarEquipo from "./pages/RegistrarEquipo.jsx";
+import Feedback from "./pages/Feedback.jsx";
+import Admin from "./pages/Admin.jsx";
 
 export default function App() {
   return (
@@ -20,6 +22,8 @@ export default function App() {
         <Route path="/recompensas" element={<Recompensas />} />
         <Route path="/registrar" element={<RegistrarEquipo />} />
         <Route path="/registrar/:gestorId" element={<RegistrarEquipo />} />
+        <Route path="/feedback" element={<Feedback />} />
+        <Route path="/admin" element={<Admin />} />
       </Route>
     </Routes>
   );
