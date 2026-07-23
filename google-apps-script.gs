@@ -44,8 +44,8 @@ function doPost(e) {
     // Encabezados la primera vez.
     if (hoja.getLastRow() === 0) {
       hoja.appendRow([
-        "Fecha", "Nombre", "Correo", "Facultad", "Rating",
-        "Comentario", "Referido - Nombre", "Referido - Celular",
+        "Fecha", "Nombre", "Ocupación", "Facultad", "Correo", "Celular",
+        "Tipo", "Descripción", "Rating", "Referido - Nombre", "Referido - Celular",
       ]);
     }
 
@@ -55,10 +55,13 @@ function doPost(e) {
     hoja.appendRow([
       new Date(),
       d.nombre || "",
-      d.correo || "",
+      d.ocupacion || "",
       d.facultad || "",
+      d.correo || "",
+      d.celular || "",
+      d.tipo || "",
+      d.descripcion || "",
       d.rating || "",
-      d.comentario || "",
       ref.nombre || "",
       ref.celular || "",
     ]);

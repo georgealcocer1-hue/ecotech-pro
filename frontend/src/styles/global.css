@@ -519,6 +519,9 @@ textarea.form-input { resize: none; height: 70px; }
 .s6-referido { background: var(--white); border-radius: 14px; padding: 14px 14px 2px; margin-top: 10px; border: 1px dashed var(--green-light); }
 .s6-error { background: #FEF2F2; color: #DC2626; border-radius: 10px; padding: 10px 14px; font-size: 12px; margin-top: 8px; text-align: center; }
 .s6-privacy { font-size: 10px; color: var(--slate-light); text-align: center; margin-top: 12px; line-height: 1.4; }
+.s6-email-espol { display: flex; align-items: stretch; }
+.s6-email-espol .form-input { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+.s6-email-suffix { display: flex; align-items: center; padding: 0 12px; background: var(--green-pale); border: 1px solid #D1D9D4; border-left: none; border-radius: 0 12px 12px 0; font-size: 12px; font-weight: 600; color: var(--green-mid); white-space: nowrap; }
 
 /* ══ SCREEN 7 — ADMIN / EXPORTAR RESPUESTAS ══ */
 .s7-stats { display: flex; gap: 10px; margin-bottom: 12px; }

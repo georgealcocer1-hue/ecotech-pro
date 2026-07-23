@@ -11,9 +11,11 @@ router.get("/", (req, res) => {
 });
 
 // POST /api/feedback — registra una respuesta del formulario de feria.
-// Body: { nombre, correo, facultad, comentario, rating, referido: { nombre, celular } }
+// Body: { nombre, ocupacion, facultad, correo, celular, tipo, descripcion,
+//         rating, referido: { nombre, celular } }
 router.post("/", (req, res) => {
-  const { nombre, correo, facultad, comentario, rating, referido } = req.body || {};
+  const { nombre, ocupacion, facultad, correo, celular, tipo, descripcion, rating, referido } =
+    req.body || {};
 
   if (!nombre || !nombre.trim()) {
     return res.status(400).json({ error: "Falta el nombre" });
@@ -29,9 +31,12 @@ router.post("/", (req, res) => {
     id: `fb-${randomUUID().slice(0, 8)}`,
     fecha: new Date().toISOString(),
     nombre: nombre.trim(),
-    correo: correo.trim(),
+    ocupacion: ocupacion || "",
     facultad: facultad || "",
-    comentario: (comentario || "").trim(),
+    correo: correo.trim(),
+    celular: (celular || "").trim(),
+    tipo: tipo || "",
+    descripcion: (descripcion || "").trim(),
     rating: Number(rating) || 0,
     referido:
       referido && referido.nombre && referido.nombre.trim()

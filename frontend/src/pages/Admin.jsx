@@ -23,10 +23,13 @@ export default function Admin() {
     const cols = [
       "fecha",
       "nombre",
-      "correo",
+      "ocupacion",
       "facultad",
+      "correo",
+      "celular",
+      "tipo",
+      "descripcion",
       "rating",
-      "comentario",
       "referido_nombre",
       "referido_celular",
     ];
@@ -34,10 +37,13 @@ export default function Admin() {
       [
         d.fecha,
         d.nombre,
-        d.correo,
+        d.ocupacion,
         d.facultad,
+        d.correo,
+        d.celular,
+        d.tipo,
+        d.descripcion,
         d.rating,
-        d.comentario,
         d.referido?.nombre || "",
         d.referido?.celular || "",
       ]
@@ -105,9 +111,11 @@ export default function Admin() {
                 </div>
                 <div className="s7-item-sub">
                   {d.correo}
+                  {d.ocupacion ? ` · ${d.ocupacion}` : ""}
                   {d.facultad ? ` · ${d.facultad}` : ""}
+                  {d.tipo ? ` · ${d.tipo}` : ""}
                 </div>
-                {d.comentario && <div className="s7-item-com">"{d.comentario}"</div>}
+                {d.descripcion && <div className="s7-item-com">"{d.descripcion}"</div>}
                 {d.referido && (
                   <div className="s7-item-ref">
                     📣 Referido: {d.referido.nombre}
