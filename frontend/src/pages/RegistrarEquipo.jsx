@@ -22,7 +22,7 @@ export default function RegistrarEquipo() {
     estado: "parcial",
     cantidad: "",
     peso: "",
-    dimension: "Mediano (Laptops, Monitores)",
+    dimension: "Mediano",
     fechaRecoleccion: "",
     comentarios: "",
   });
@@ -164,9 +164,9 @@ export default function RegistrarEquipo() {
           <div className="form-group">
             <label className="form-label">Dimensiones (Tamaño)</label>
             <select className="form-input" value={form.dimension} onChange={set("dimension")}>
-              <option>Pequeño (Cables, Celulares)</option>
-              <option>Mediano (Laptops, Monitores)</option>
-              <option>Grande (Servidores, Electrodomésticos)</option>
+              <option value="Pequeño">Pequeño</option>
+              <option value="Mediano">Mediano</option>
+              <option value="Grande">Grande</option>
             </select>
           </div>
 

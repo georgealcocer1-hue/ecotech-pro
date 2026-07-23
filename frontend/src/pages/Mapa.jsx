@@ -5,7 +5,7 @@ import { api } from "../services/api.js";
 const SERVICIOS = [
   { id: "Reciclaje",   icon: "♻️",  color: "green", desc: "Gestión de residuos RAEE" },
   { id: "Reparación",  icon: "🔧",  color: "amber", desc: "Reparación de equipos"    },
-  { id: "Diagnóstico", icon: "🔍",  color: "blue",  desc: "Evaluación técnica"        },
+  { id: "Diagnóstico", icon: "🔍",  color: "dark-green",  desc: "Evaluación técnica"        },
 ];
 
 export default function Mapa() {
@@ -77,24 +77,40 @@ export default function Mapa() {
         <div className="map-road-v" style={{ left: "22%", top: 0, height: "100%" }} />
         <div className="map-road-v" style={{ left: "55%", top: 0, height: "100%" }} />
         <div className="map-road-v" style={{ left: "80%", top: 0, height: "100%" }} />
-        {todosGestores.map((g) => (
-          <div
-            key={g.id}
-            className="map-marker"
-            style={{ top: g.mapa.top, left: g.mapa.left }}
-            onClick={() => {
-              const servicio =
-                servicioActivo ||
-                g.servicios?.find((s) => SERVICIOS.some((sv) => sv.id === s.label))?.label;
-              navigate(`/gestor/${g.id}${servicio ? `?servicio=${encodeURIComponent(servicio)}` : ""}`);
-            }}
-          >
-            <div className={`marker-pin ${g.mapa.color}`}>
-              <span>{g.icon}</span>
+        {gestoresFiltrados.map((g) => {
+          let pinIcon = g.icon;
+          let pinColor = g.mapa.color;
+
+          if (servicioActivo === "Diagnóstico") {
+            pinIcon = "🔍";
+            pinColor = "dark-green";
+          } else if (servicioActivo === "Reciclaje") {
+            pinIcon = "♻️";
+            pinColor = "green";
+          } else if (servicioActivo === "Reparación") {
+            pinIcon = "🔧";
+            pinColor = "amber";
+          }
+
+          return (
+            <div
+              key={g.id}
+              className="map-marker"
+              style={{ top: g.mapa.top, left: g.mapa.left }}
+              onClick={() => {
+                const servicio =
+                  servicioActivo ||
+                  g.servicios?.find((s) => SERVICIOS.some((sv) => sv.id === s.label))?.label;
+                navigate(`/gestor/${g.id}${servicio ? `?servicio=${encodeURIComponent(servicio)}` : ""}`);
+              }}
+            >
+              <div className={`marker-pin ${pinColor}`}>
+                <span>{pinIcon}</span>
+              </div>
+              <div className="marker-label">{g.nombre.split(" ")[0]}</div>
             </div>
-            <div className="marker-label">{g.nombre.split(" ")[0]}</div>
-          </div>
-        ))}
+          );
+        })}
         <div className="map-my-loc" />
       </div>
 

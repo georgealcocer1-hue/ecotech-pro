@@ -88,7 +88,7 @@ export const seed = {
     {
       id: "colectatech",
       nombre: "ColectaTech",
-      icon: "🗑️",
+      icon: "♻️",
       tipo: "Recolección",
       etiquetaTipo: "Recolección · Logística",
       rating: 4.8,
